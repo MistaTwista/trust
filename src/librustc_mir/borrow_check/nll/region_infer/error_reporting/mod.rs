@@ -253,28 +253,40 @@ impl<'tcx> RegionInferenceContext<'tcx> {
             let outgoing_edges_from_graph = self.constraint_graph
                 .outgoing_edges(r, &self.constraints, fr_static);
 
-
-            // But member constraints can also give rise to `'r: 'x`
-            // edges that were not part of the graph initially, so
-            // watch out for those.
-            let outgoing_edges_from_picks = self.applied_member_constraints(r)
-                .iter()
-                .map(|&AppliedMemberConstraint { min_choice, member_constraint_index, .. }| {
-                    let p_c = &self.member_constraints[member_constraint_index];
-                    OutlivesConstraint {
-                        sup: r,
-                        sub: min_choice,
-                        locations: Locations::All(p_c.definition_span),
-                        category: ConstraintCategory::OpaqueType,
+            macro_rules! handle_constraint {
+                ($constraint:ident) => {
+                    debug_assert_eq!($constraint.sup, r);
+                    let sub_region = $constraint.sub;
+                    if let Trace::NotVisited = context[sub_region] {
+                        context[sub_region] = Trace::FromOutlivesConstraint($constraint);
+                        deque.push_back(sub_region);
                     }
-                });
+                }
+            }
 
-            for constraint in outgoing_edges_from_graph.chain(outgoing_edges_from_picks) {
-                debug_assert_eq!(constraint.sup, r);
-                let sub_region = constraint.sub;
-                if let Trace::NotVisited = context[sub_region] {
-                    context[sub_region] = Trace::FromOutlivesConstraint(constraint);
-                    deque.push_back(sub_region);
+            for constraint in outgoing_edges_from_graph {
+                handle_constraint!(constraint);
+            }
+
+            // But member constraints can also give rise to `'r: 'x` edges that
+            // were not part of the graph initially, so watch out for those.
+            // (But they are extremely rare.)
+            let applied_member_constraints = self.applied_member_constraints(r);
+            if !applied_member_constraints.is_empty() {
+                let outgoing_edges_from_picks = self.applied_member_constraints(r)
+                    .iter()
+                    .map(|&AppliedMemberConstraint { min_choice, member_constraint_index, .. }| {
+                        let p_c = &self.member_constraints[member_constraint_index];
+                        OutlivesConstraint {
+                            sup: r,
+                            sub: min_choice,
+                            locations: Locations::All(p_c.definition_span),
+                            category: ConstraintCategory::OpaqueType,
+                        }
+                    });
+
+                for constraint in outgoing_edges_from_picks {
+                    handle_constraint!(constraint);
                 }
             }
         }
