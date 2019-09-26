@@ -1,9 +1,9 @@
-# The Rust Programming Language
+# The Trust Programming Language
 
-This is the main source code repository for [Rust]. It contains the compiler,
+This is the main source code repository for [Trust]. It contains the compiler,
 standard library, and documentation.
 
-[Rust]: https://www.rust-lang.org
+[Trust]: https://www.rust-lang.org
 
 ## Quick Start
 
@@ -17,7 +17,7 @@ Read ["Installation"] from [The Book].
 _Note: If you wish to contribute to the compiler, you should read [this
 chapter][rustcguidebuild] of the rustc-guide instead of this section._
 
-The Rust build system has a Python script called `x.py` to bootstrap building
+The Trust build system has a Python script called `x.py` to bootstrap building
 the compiler. More information about it may be found by running `./x.py --help`
 or reading the [rustc guide][rustcguidebuild].
 
@@ -37,15 +37,15 @@ or reading the [rustc guide][rustcguidebuild].
 2. Clone the [source] with `git`:
 
    ```sh
-   $ git clone https://github.com/rust-lang/rust.git
-   $ cd rust
+   $ git clone https://github.com/MistaTwista/trust.git
+   $ cd trust
    ```
 
-[source]: https://github.com/rust-lang/rust
+[source]: https://github.com/MistaTwista/trust
 
 3. Configure the build settings:
 
-    The Rust build system uses a file named `config.toml` in the root of the
+    The Trust build system uses a file named `config.toml` in the root of the
     source tree to determine various configuration settings for the build.
     Copy the default `config.toml.example` to `config.toml` to get started.
 
@@ -53,7 +53,7 @@ or reading the [rustc guide][rustcguidebuild].
     $ cp config.toml.example config.toml
     ```
 
-    It is recommended that if you plan to use the Rust build system to create
+    It is recommended that if you plan to use the Trust build system to create
     an installation (using `./x.py install`) that you set the `prefix` value
     in the `[install]` section to a directory that you have write permissions.
 
@@ -66,9 +66,9 @@ or reading the [rustc guide][rustcguidebuild].
     ```
 
     When complete, `./x.py install` will place several programs into
-    `$PREFIX/bin`: `rustc`, the Rust compiler, and `rustdoc`, the
+    `$PREFIX/bin`: `rustc`, the Trust compiler, and `rustdoc`, the
     API-documentation tool. This install does not include [Cargo],
-    Rust's package manager. To build and install Cargo, you may
+    Trust's package manager. To build and install Cargo, you may
     run `./x.py install cargo` or set the `build.extended` key in
     `config.toml` to `true` to build and install all tools.
 
@@ -77,15 +77,15 @@ or reading the [rustc guide][rustcguidebuild].
 ### Building on Windows
 
 There are two prominent ABIs in use on Windows: the native (MSVC) ABI used by
-Visual Studio, and the GNU ABI used by the GCC toolchain. Which version of Rust
+Visual Studio, and the GNU ABI used by the GCC toolchain. Which version of Trust
 you need depends largely on what C/C++ libraries you want to interoperate with:
-for interop with software produced by Visual Studio use the MSVC build of Rust;
+for interop with software produced by Visual Studio use the MSVC build of Trust;
 for interop with GNU software built using the MinGW/MSYS2 toolchain use the GNU
 build.
 
 #### MinGW
 
-[MSYS2][msys2] can be used to easily build Rust on Windows:
+[MSYS2][msys2] can be used to easily build Trust on Windows:
 
 [msys2]: https://msys2.github.io/
 
@@ -93,7 +93,7 @@ build.
 
 2. Run `mingw32_shell.bat` or `mingw64_shell.bat` from wherever you installed
    MSYS2 (i.e. `C:\msys64`), depending on whether you want 32-bit or 64-bit
-   Rust. (As of the latest version of MSYS2 you have to run `msys2_shell.cmd
+   Trust. (As of the latest version of MSYS2 you have to run `msys2_shell.cmd
    -mingw32` or `msys2_shell.cmd -mingw64` from the command line instead)
 
 3. From this terminal, install the required tools:
@@ -102,7 +102,7 @@ build.
    # Update package mirrors (may be needed if you have a fresh install of MSYS2)
    $ pacman -Sy pacman-mirrors
 
-   # Install build tools needed for Rust. If you're building a 32-bit compiler,
+   # Install build tools needed for Trust. If you're building a 32-bit compiler,
    # then replace "x86_64" below with "i686". If you've already got git, python,
    # or CMake installed and in PATH you can remove them from this list. Note
    # that it is important that you do **not** use the 'python2' and 'cmake'
@@ -117,7 +117,7 @@ build.
                mingw-w64-x86_64-gcc
    ```
 
-4. Navigate to Rust's source code (or clone it), then build it:
+4. Navigate to Trust's source code (or clone it), then build it:
 
    ```sh
    $ ./x.py build && ./x.py install
@@ -125,7 +125,7 @@ build.
 
 #### MSVC
 
-MSVC builds of Rust additionally require an installation of Visual Studio 2017
+MSVC builds of Trust additionally require an installation of Visual Studio 2017
 (or later) so `rustc` can use its linker.  The simplest way is to get the
 [Visual Studio], check the “C++ build tools” and “Windows 10 SDK” workload.
 
@@ -141,7 +141,7 @@ shell with:
 > python x.py build
 ```
 
-Currently, building Rust only works with some known versions of Visual Studio. If
+Currently, building Trust only works with some known versions of Visual Studio. If
 you have a more recent version installed the build system doesn't understand
 then you may need to force rustbuild to use an older version. This can be done
 by manually calling the appropriate vcvars file before running the bootstrap.
@@ -152,7 +152,7 @@ by manually calling the appropriate vcvars file before running the bootstrap.
 ```
 
 ### Building rustc with older host toolchains
-It is still possible to build Rust with the older toolchain versions listed below, but only if the
+It is still possible to build Trust with the older toolchain versions listed below, but only if the
 LLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN option is set to true in the config.toml file.
 
 * Clang 3.1
@@ -207,7 +207,7 @@ the ABI used. I.e., if the ABI was `x86_64-pc-windows-msvc`, the directory will 
 
 ## Notes
 
-Since the Rust compiler is written in Rust, it must be built by a
+Since the Trust compiler is written in Rust, it must be built by a
 precompiled "snapshot" version of itself (made in an earlier stage of
 development). As such, source builds require a connection to the Internet, to
 fetch snapshots, and an OS that can execute the available snapshot binaries.
@@ -223,13 +223,13 @@ Snapshot binaries are currently built and tested on several platforms:
 You may find that other platforms work, but these are our officially
 supported build environments that are most likely to work.
 
-There is more advice about hacking on Rust in [CONTRIBUTING.md].
+There is more advice about hacking on Trust in [CONTRIBUTING.md].
 
 [CONTRIBUTING.md]: https://github.com/rust-lang/rust/blob/master/CONTRIBUTING.md
 
 ## Getting Help
 
-The Rust community congregates in a few places:
+The Trust community congregates in a few places:
 
 * [Stack Overflow] - Direct questions about using the language.
 * [users.rust-lang.org] - General discussion and broader questions.
@@ -241,12 +241,12 @@ The Rust community congregates in a few places:
 
 ## Contributing
 
-To contribute to Rust, please see [CONTRIBUTING](CONTRIBUTING.md).
+To contribute to Trust, please see [CONTRIBUTING](CONTRIBUTING.md).
 
-Rust has an [IRC] culture and most real-time collaboration happens in a
+Trust has an [IRC] culture and most real-time collaboration happens in a
 variety of channels on Mozilla's IRC network, irc.mozilla.org. The
 most popular channel is [#rust], a venue for general discussion about
-Rust. And a good place to ask for help would be [#rust-beginners].
+Trust. And a good place to ask for help would be [#rust-beginners].
 
 The [rustc guide] might be a good place to start if you want to find out how
 various parts of the compiler work.
@@ -261,7 +261,7 @@ Also, you may find the [rustdocs for the compiler itself][rustdocs] useful.
 
 ## License
 
-Rust is primarily distributed under the terms of both the MIT license
+Trust is primarily distributed under the terms of both the MIT license
 and the Apache License (Version 2.0), with portions covered by various
 BSD-like licenses.
 
@@ -282,3 +282,8 @@ Third-party logos may be subject to third-party copyrights and trademarks. See
 
 [media-guide]: https://www.rust-lang.org/policies/media-guide
 [policies-licenses]: https://www.rust-lang.org/policies/licenses
+
+## WTF
+
+This project forked for fun from [Rust](https://github.com/rust-lang/rust).
+I just wanted to show new name for great project. Trust is better than Rust.
